@@ -147,6 +147,27 @@
         min-height: 3.5em;
       }
 
+      .word {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        display: inline;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        line-height: inherit;
+        width: auto;
+        max-width: none;
+        border-radius: 0;
+      }
+
+      .word:hover {
+        color: var(--accent-dark);
+      }
+
       .controls {
         margin-top: clamp(16px, 3vw, 24px);
         display: flex;
@@ -213,7 +234,109 @@
       }
 
       .hidden {
-        display: none;
+        display: none !important;
+      }
+
+      .dict-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(31, 42, 51, 0.45);
+        display: flex;
+        justify-content: flex-end;
+        align-items: stretch;
+        z-index: 6;
+      }
+
+      .dict-panel {
+        width: min(520px, 50vw);
+        height: 100%;
+        background: rgba(255, 255, 255, 0.96);
+        border-left: 1px solid var(--stroke);
+        box-shadow: -20px 0 40px rgba(31, 42, 51, 0.2);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .dict-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .dict-title {
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: 28px;
+      }
+
+      .dict-phonetic {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .dict-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .dict-close {
+        background: rgba(31, 42, 51, 0.08);
+        border: none;
+        border-radius: 999px;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .dict-play {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .dict-play[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .dict-body {
+        overflow-y: auto;
+        padding-right: 6px;
+      }
+
+      .meaning {
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(31, 42, 51, 0.08);
+      }
+
+      .meaning:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .part {
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .definition {
+        margin-bottom: 6px;
+        color: var(--ink);
+      }
+
+      .dict-note {
+        color: var(--muted);
+        font-size: 13px;
       }
 
       @media (max-width: 600px) {
@@ -226,9 +349,18 @@
           border-radius: 20px;
         }
 
-        button {
+        .controls button {
           width: 100%;
           max-width: 260px;
+        }
+
+        .dict-panel {
+          width: 100%;
+          height: 55vh;
+          align-self: flex-end;
+          border-left: none;
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
         }
       }
     </style>
@@ -266,6 +398,21 @@
     </main>
 
     <button class="overlay hidden" id="startOverlay">Tap to Start Audio</button>
+    <div class="dict-overlay hidden" id="dictOverlay" aria-hidden="true">
+      <div class="dict-panel" role="dialog" aria-modal="true" aria-labelledby="dictWord">
+        <div class="dict-header">
+          <div>
+            <div class="dict-title" id="dictWord">Word</div>
+            <div class="dict-phonetic" id="dictPhonetic"></div>
+          </div>
+          <div class="dict-actions">
+            <button class="dict-play" id="dictPlay">Play</button>
+            <button class="dict-close" id="dictClose">Close</button>
+          </div>
+        </div>
+        <div class="dict-body" id="dictBody"></div>
+      </div>
+    </div>
     <audio id="audio" preload="auto"></audio>
 
     <script>
@@ -285,8 +432,18 @@
       const playBtn = document.getElementById("play");
       const prevBtn = document.getElementById("prev");
       const nextBtn = document.getElementById("next");
+      const dictOverlay = document.getElementById("dictOverlay");
+      const dictWordEl = document.getElementById("dictWord");
+      const dictPhoneticEl = document.getElementById("dictPhonetic");
+      const dictBodyEl = document.getElementById("dictBody");
+      const dictPlayBtn = document.getElementById("dictPlay");
+      const dictCloseBtn = document.getElementById("dictClose");
 
       const padId = (id) => String(id).padStart(3, "0");
+
+      const dictCache = new Map();
+      let dictAudio = new Audio();
+      let dictAudioUrl = "";
 
       const resolveBaseUrl = () => {
         const path = window.location.pathname;
@@ -317,6 +474,25 @@
         playBtn.textContent = audio.paused ? "Play" : "Pause";
       }
 
+      function renderSentence(text) {
+        sentenceEl.innerHTML = "";
+        const parts = text.match(/[A-Za-z]+(?:'[A-Za-z]+)?|[^A-Za-z]+/g) || [
+          text,
+        ];
+        for (const part of parts) {
+          if (/^[A-Za-z]/.test(part)) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "word";
+            btn.textContent = part;
+            btn.dataset.word = part;
+            sentenceEl.appendChild(btn);
+          } else {
+            sentenceEl.appendChild(document.createTextNode(part));
+          }
+        }
+      }
+
       async function loadCard(nextIndex) {
         if (!state.items.length) return;
 
@@ -339,7 +515,12 @@
             throw new Error(`HTTP ${res.status}`);
           }
           const text = await res.text();
-          sentenceEl.textContent = text.trim() || "(empty)";
+          const trimmed = text.trim();
+          if (!trimmed) {
+            sentenceEl.textContent = "(empty)";
+          } else {
+            renderSentence(trimmed);
+          }
         } catch (err) {
           const reason = err && err.message ? ` (${err.message})` : "";
           sentenceEl.textContent = `Failed to load text${reason}`;
@@ -378,6 +559,112 @@
         updateButtons();
       }
 
+      function openDictionary() {
+        if (!audio.paused) {
+          pause();
+        }
+        dictOverlay.classList.remove("hidden");
+        dictOverlay.setAttribute("aria-hidden", "false");
+      }
+
+      function closeDictionary() {
+        dictOverlay.classList.add("hidden");
+        dictOverlay.setAttribute("aria-hidden", "true");
+      }
+
+      function renderDefinitions(entry) {
+        dictBodyEl.innerHTML = "";
+        if (!entry || !entry.meanings || !entry.meanings.length) {
+          dictBodyEl.innerHTML =
+            '<div class="dict-note">No definitions found.</div>';
+          return;
+        }
+        entry.meanings.forEach((meaning) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "meaning";
+          const part = document.createElement("div");
+          part.className = "part";
+          part.textContent = meaning.partOfSpeech || "Meaning";
+          wrapper.appendChild(part);
+          (meaning.definitions || []).slice(0, 4).forEach((def) => {
+            const defEl = document.createElement("div");
+            defEl.className = "definition";
+            defEl.textContent = def.definition;
+            wrapper.appendChild(defEl);
+          });
+          dictBodyEl.appendChild(wrapper);
+        });
+      }
+
+      function setDictionaryState({ word, phonetic, audioUrl, entry, note }) {
+        dictWordEl.textContent = word || "Word";
+        dictPhoneticEl.textContent = phonetic || "";
+        dictAudioUrl = audioUrl || "";
+        dictPlayBtn.disabled = !dictAudioUrl;
+        if (note) {
+          dictBodyEl.innerHTML = `<div class="dict-note">${note}</div>`;
+        } else {
+          renderDefinitions(entry);
+        }
+      }
+
+      async function fetchDictionary(word) {
+        const normalized = word.toLowerCase();
+        if (dictCache.has(normalized)) {
+          return dictCache.get(normalized);
+        }
+        const res = await fetch(
+          `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(
+            normalized
+          )}`
+        );
+        if (!res.ok) {
+          throw new Error(`No entry for "${word}"`);
+        }
+        const data = await res.json();
+        dictCache.set(normalized, data);
+        return data;
+      }
+
+      async function showDictionary(word) {
+        openDictionary();
+        setDictionaryState({
+          word,
+          phonetic: "",
+          audioUrl: "",
+          entry: null,
+          note: "Loading...",
+        });
+        try {
+          const data = await fetchDictionary(word);
+          const entry = data[0];
+          const phonetic =
+            entry.phonetic ||
+            (entry.phonetics || [])
+              .map((p) => p.text)
+              .find((text) => text) ||
+            "";
+          const audioUrl =
+            (entry.phonetics || [])
+              .map((p) => p.audio)
+              .find((audio) => audio) || "";
+          setDictionaryState({
+            word: entry.word || word,
+            phonetic,
+            audioUrl,
+            entry,
+          });
+        } catch (err) {
+          setDictionaryState({
+            word,
+            phonetic: "",
+            audioUrl: "",
+            entry: null,
+            note: "No dictionary entry found.",
+          });
+        }
+      }
+
       prevBtn.addEventListener("click", () => loadCard(state.index - 1));
       nextBtn.addEventListener("click", () => loadCard(state.index + 1));
       playBtn.addEventListener("click", () => {
@@ -391,6 +678,27 @@
       overlay.addEventListener("click", () => {
         state.autoPlay = true;
         tryPlay();
+      });
+
+      dictPlayBtn.addEventListener("click", () => {
+        if (!dictAudioUrl) return;
+        dictAudio.pause();
+        dictAudio = new Audio(dictAudioUrl);
+        dictAudio.play().catch(() => {});
+      });
+
+      dictCloseBtn.addEventListener("click", closeDictionary);
+      dictOverlay.addEventListener("click", (event) => {
+        if (event.target === dictOverlay) {
+          closeDictionary();
+        }
+      });
+
+      sentenceEl.addEventListener("click", (event) => {
+        const target = event.target;
+        if (target && target.classList.contains("word")) {
+          showDictionary(target.dataset.word || target.textContent);
+        }
       });
 
       document.addEventListener("keydown", (event) => {
@@ -407,6 +715,9 @@
           } else {
             pause();
           }
+        }
+        if (event.key === "Escape") {
+          closeDictionary();
         }
       });
 

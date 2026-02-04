@@ -1,5 +1,5 @@
 {
-  "count": 132,
+  "count": 131,
   "items": [
     {
       "id": 1,
@@ -524,10 +524,6 @@
     {
       "id": 131,
       "base": "sentence_131"
-    },
-    {
-      "id": 132,
-      "base": "sentence_132"
     }
   ]
 }

@@ -176,6 +176,35 @@
         flex-wrap: wrap;
       }
 
+      .jump {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--stroke);
+      }
+
+      .jump input {
+        width: 80px;
+        border: none;
+        background: transparent;
+        font: inherit;
+        text-align: center;
+        outline: none;
+      }
+
+      .jump button {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
       button {
         border: none;
         border-radius: 999px;
@@ -392,6 +421,10 @@
         <button class="ghost" id="prev">Prev</button>
         <button class="primary" id="play">Pause</button>
         <button class="ghost" id="next">Next</button>
+        <div class="jump">
+          <input type="number" id="jumpInput" min="1" placeholder="#" />
+          <button type="button" id="jumpBtn">Go</button>
+        </div>
       </div>
 
       <div class="hint">Use Left/Right to switch, Space to play/pause.</div>
@@ -438,12 +471,15 @@
       const dictBodyEl = document.getElementById("dictBody");
       const dictPlayBtn = document.getElementById("dictPlay");
       const dictCloseBtn = document.getElementById("dictClose");
+      const jumpInput = document.getElementById("jumpInput");
+      const jumpBtn = document.getElementById("jumpBtn");
 
       const padId = (id) => String(id).padStart(3, "0");
 
       const dictCache = new Map();
       let dictAudio = new Audio();
       let dictAudioUrl = "";
+      const lastIndexKey = "pte-cards-last-index";
 
       const resolveBaseUrl = () => {
         const path = window.location.pathname;
@@ -503,6 +539,8 @@
         progressEl.textContent = `${state.index + 1} / ${state.items.length}`;
         statusEl.textContent = state.loop ? "Looping" : "Single Play";
         sentenceEl.textContent = "Loading...";
+        jumpInput.value = state.index + 1;
+        localStorage.setItem(lastIndexKey, String(state.index));
 
         audio.pause();
         audio.currentTime = 0;
@@ -701,6 +739,20 @@
         }
       });
 
+      function jumpToInput() {
+        const value = Number(jumpInput.value);
+        if (!Number.isFinite(value)) return;
+        const targetIndex = Math.max(1, Math.min(value, state.items.length)) - 1;
+        loadCard(targetIndex);
+      }
+
+      jumpBtn.addEventListener("click", jumpToInput);
+      jumpInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          jumpToInput();
+        }
+      });
+
       document.addEventListener("keydown", (event) => {
         if (event.key === "ArrowLeft") {
           loadCard(state.index - 1);
@@ -722,7 +774,12 @@
       });
 
       loadManifest()
-        .then(() => loadCard(0))
+        .then(() => {
+          const stored = Number(localStorage.getItem(lastIndexKey));
+          const startIndex =
+            Number.isFinite(stored) && stored >= 0 ? stored : 0;
+          loadCard(startIndex);
+        })
         .catch(() => {
           sentenceEl.textContent = "Could not load segments/manifest.json";
         });

@@ -288,8 +288,23 @@
 
       const padId = (id) => String(id).padStart(3, "0");
 
+      const resolveBaseUrl = () => {
+        const path = window.location.pathname;
+        let basePath = path;
+        if (!basePath.endsWith("/")) {
+          if (basePath.includes(".")) {
+            basePath = basePath.slice(0, basePath.lastIndexOf("/") + 1);
+          } else {
+            basePath = basePath + "/";
+          }
+        }
+        return `${window.location.origin}${basePath}`;
+      };
+
+      const segmentsBaseUrl = new URL("segments/", resolveBaseUrl());
+
       async function loadManifest() {
-        const res = await fetch("segments/manifest.json");
+        const res = await fetch(new URL("manifest.json", segmentsBaseUrl));
         if (!res.ok) {
           throw new Error("Failed to load manifest");
         }
@@ -315,15 +330,19 @@
 
         audio.pause();
         audio.currentTime = 0;
-        audio.src = `segments/${item.base}.m4a`;
+        audio.src = new URL(`${item.base}.m4a`, segmentsBaseUrl).toString();
         audio.loop = state.loop;
 
         try {
-          const res = await fetch(`segments/${item.base}.txt`);
+          const res = await fetch(new URL(`${item.base}.txt`, segmentsBaseUrl));
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
           const text = await res.text();
           sentenceEl.textContent = text.trim() || "(empty)";
         } catch (err) {
-          sentenceEl.textContent = "Failed to load text";
+          const reason = err && err.message ? ` (${err.message})` : "";
+          sentenceEl.textContent = `Failed to load text${reason}`;
         }
 
         if (state.autoPlay) {

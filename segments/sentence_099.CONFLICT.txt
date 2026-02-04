@@ -1,3 +1,0 @@
-TARGET: If the doctor calls while I'm out, please leave a message.
-ASR: If the doctor calls while I'm on, please leave a message.
-SCORE: 0.931

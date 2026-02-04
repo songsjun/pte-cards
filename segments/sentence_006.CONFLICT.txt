@@ -1,3 +1,0 @@
-TARGET: You need to have warm clothes for winter.
-ASR: You need to have room close for winter.
-SCORE: 0.808

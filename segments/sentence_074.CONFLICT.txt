@@ -1,3 +1,0 @@
-TARGET: I make sure to prepare a report for my boss.
-ASR: and make sure to prepare a report from a boss.
-SCORE: 0.795

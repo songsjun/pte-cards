@@ -1,3 +1,0 @@
-TARGET: The bus for London will leave early tomorrow morning.
-ASR: The best for Linden will leave early tomorrow morning.
-SCORE: 0.844

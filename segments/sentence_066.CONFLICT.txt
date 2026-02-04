@@ -1,3 +1,0 @@
-TARGET: Assignments should be submitted to the department office before the deadline.
-ASR: Assignments should be submitted to the Department Office before the death line.
-SCORE: 0.907

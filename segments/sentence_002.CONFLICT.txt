@@ -1,3 +1,0 @@
-TARGET: The supermarket is located near the theatre.
-ASR: The supermarket is located near the theater.
-SCORE: 0.898

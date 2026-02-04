@@ -1,3 +1,0 @@
-TARGET: Your abstract should contain the empirical evidence of your research.
-ASR: your abstracts will contain the empirical evidence of your research.
-SCORE: 0.844

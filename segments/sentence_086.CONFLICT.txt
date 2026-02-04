@@ -1,3 +1,0 @@
-TARGET: Please read the article that was given out yesterday.
-ASR: Please read the article that was given out today.
-SCORE: 0.898

@@ -1,3 +1,0 @@
-TARGET: You can get the books in the library.
-ASR: you can get a books in the library.
-SCORE: 0.922

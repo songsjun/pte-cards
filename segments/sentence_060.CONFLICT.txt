@@ -1,3 +1,0 @@
-TARGET: The bus for London will be scheduled once a week.
-ASR: The bus for Linden will be scheduled once a week.
-SCORE: 0.916

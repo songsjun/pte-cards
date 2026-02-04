@@ -1,3 +1,0 @@
-TARGET: I have lectures on Tuesday from 9 am until 2 pm.
-ASR: I have lectures on Tuesday from 9 a.m. until 2 p.m.
-SCORE: 0.859

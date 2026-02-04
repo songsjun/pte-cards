@@ -1,3 +1,0 @@
-TARGET: Students meet the minimum requirement qualified.
-ASR: Students mean the minimum requirement qualified.
-SCORE: 0.884

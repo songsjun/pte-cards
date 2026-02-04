@@ -1,3 +1,0 @@
-TARGET: Passengers on the train should take their seats.
-ASR: Passengers and the trains should take their seats.
-SCORE: 0.851

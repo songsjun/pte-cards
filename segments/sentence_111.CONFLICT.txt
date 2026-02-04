@@ -1,3 +1,0 @@
-TARGET: If finance is a cause for concern, scholarships may be available.
-ASR: If finance is a cost for concern, scholarships may be available.
-SCORE: 0.922

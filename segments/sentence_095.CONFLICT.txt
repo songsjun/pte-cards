@@ -1,3 +1,0 @@
-TARGET: Please submit all assignments before the deadline.
-ASR: Please submit all assignments for that line.
-SCORE: 0.744

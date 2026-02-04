@@ -1,3 +1,0 @@
-TARGET: If you forget your password, contact the support center after a few minutes.
-ASR: If you get your password, contact the support center after a few minutes.
-SCORE: 0.943

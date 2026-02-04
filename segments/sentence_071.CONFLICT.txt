@@ -1,3 +1,0 @@
-TARGET: Your wages will be put into your bank account on Thursday（或Tuesday）.
-ASR: Your wages will be put into your bank account on Thursday.
-SCORE: 0.927

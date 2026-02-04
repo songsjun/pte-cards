@@ -1,3 +1,0 @@
-TARGET: You need to make an appointment with the doctor.
-ASR: You need to make an appointment with a doctor.
-SCORE: 0.910

@@ -1,3 +1,0 @@
-TARGET: Car park permit can be obtained at the student service center.
-ASR: Carproc Permit can be obtained at a Student Service Center.
-SCORE: 0.832

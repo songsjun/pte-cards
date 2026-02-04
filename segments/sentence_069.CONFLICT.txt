@@ -1,3 +1,0 @@
-TARGET: You need to record every detail of the call in the afternoon.
-ASR: It needs to record every detail of the call in the afternoon.
-SCORE: 0.873

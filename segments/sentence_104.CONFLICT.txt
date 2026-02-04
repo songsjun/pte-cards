@@ -1,3 +1,0 @@
-TARGET: The test showed that you know a lot about Canada.
-ASR: The test shows that you know a lot about Canada.
-SCORE: 0.923

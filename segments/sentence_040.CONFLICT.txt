@@ -1,3 +1,0 @@
-TARGET: We are committed to recruiting the best students regardless of their financial situation.
-ASR: We are committed to recruiting the very best students, regardless of their financial circumstances.
-SCORE: 0.868

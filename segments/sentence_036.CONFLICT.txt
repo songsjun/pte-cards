@@ -1,3 +1,0 @@
-TARGET: If you wish to be a good student, you should attend every class.
-ASR: if you wish to be a good student.
-SCORE: 0.677

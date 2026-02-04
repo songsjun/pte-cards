@@ -1,3 +1,0 @@
-TARGET: If you like cooking, we can make supper together
-ASR: if you like crooking.
-SCORE: 0.487

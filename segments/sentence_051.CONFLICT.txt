@@ -1,3 +1,0 @@
-TARGET: The origin of psychology can be traced back to ancient Greece.
-ASR: The origin of psychology can be tracked back to asian crease.
-SCORE: 0.796

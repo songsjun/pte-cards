@@ -1,3 +1,0 @@
-TARGET: There is a fitness centre next to the student union.
-ASR: There is a fitness center next to the student union.
-SCORE: 0.932

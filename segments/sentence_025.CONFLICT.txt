@@ -1,3 +1,0 @@
-TARGET: You are not sure that you can skip the sessions for Wednesday.
-ASR: You are not sure that you can skip the sessions for one stay.
-SCORE: 0.890

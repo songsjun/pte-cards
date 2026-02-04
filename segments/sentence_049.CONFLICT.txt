@@ -1,3 +1,0 @@
-TARGET: The full list of undergraduate and postgraduate programs can be found on the website.
-ASR: The full list of undergraduate and postgraduate programs can be found on a website.
-SCORE: 0.962

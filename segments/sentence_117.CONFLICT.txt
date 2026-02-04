@@ -1,3 +1,0 @@
-TARGET: You will have the flexibility to choose your own path as a marine engineer.
-ASR: It will have the flexibility to choose your own path as a marine engineer.
-SCORE: 0.936

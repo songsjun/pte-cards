@@ -1,3 +1,0 @@
-TARGET: Parking permits can be collected through the student service office.
-ASR: Parking permits can be collected to the Student Service Office.
-SCORE: 0.918

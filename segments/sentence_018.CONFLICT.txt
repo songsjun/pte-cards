@@ -1,3 +1,0 @@
-TARGET: The study demonstrates a need for further research in this field.
-ASR: This study demonstrates a need for further research in this field.
-SCORE: 0.956

@@ -1,3 +1,0 @@
-TARGET: Grocery store is around the corner down the street.
-ASR: Grass reed store is around the corner down the street.
-SCORE: 0.835

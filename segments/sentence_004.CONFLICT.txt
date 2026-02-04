@@ -1,3 +1,0 @@
-TARGET: The bus for London will leave ten minutes later than planned.
-ASR: The Bass for Linden will leave 10 minutes later than planned.
-SCORE: 0.819

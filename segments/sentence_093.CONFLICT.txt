@@ -1,3 +1,0 @@
-TARGET: The library is downstairs on the east side of the building.
-ASR: The library downstairs on the east side of the building.
-SCORE: 0.948

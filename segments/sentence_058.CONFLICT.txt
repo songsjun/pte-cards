@@ -1,0 +1,3 @@
+TARGET: You can register your card at the university student centre or the library.
+ASR: You can register your card at the University Student Center or the Library.
+SCORE: 0.944

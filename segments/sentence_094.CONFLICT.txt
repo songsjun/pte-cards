@@ -1,0 +1,3 @@
+TARGET: The restaurant is located across the theater.
+ASR: The restaurant is located across the theatre.
+SCORE: 0.898

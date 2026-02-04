@@ -1,0 +1,3 @@
+TARGET: The students are supposed to assemble in the seminar hall before the announcement.
+ASR: The students are supposed to assemble in a seminar hall before the announcement.
+SCORE: 0.958

@@ -1,0 +1,3 @@
+TARGET: Your car can park in the building behind the medical center.
+ASR: Your car can park in the building behind a medical center.
+SCORE: 0.949

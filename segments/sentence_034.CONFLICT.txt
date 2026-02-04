@@ -1,0 +1,3 @@
+TARGET: Students with a wide range of backgrounds can (will) achieve a variety of qualifcations.
+ASR: Students with a wide range of backgrounds can achieve a variety of qualifications.
+SCORE: 0.905

@@ -1,0 +1,3 @@
+TARGET: Show your passport and boarding pass at the gate.
+ASR: Show your passport and boarding pass at a gate.
+SCORE: 0.910

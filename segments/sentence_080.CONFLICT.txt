@@ -1,0 +1,3 @@
+TARGET: You need to pass the written exam to apply for the driver’s licenses.
+ASR: You need to pass the written exam to apply for the driver's licenses.
+SCORE: 0.920

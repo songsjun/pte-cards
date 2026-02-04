@@ -1,0 +1,3 @@
+TARGET: Your son has a bad cold and is in the nurse’s room.
+ASR: Your son has a bad cold and is in the nurses room.
+SCORE: 0.929

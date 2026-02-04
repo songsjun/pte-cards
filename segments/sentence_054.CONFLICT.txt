@@ -1,0 +1,3 @@
+TARGET: You need to wear hard hat into the construction site
+ASR: You need to wear a hard hat into the construction site.
+SCORE: 0.960

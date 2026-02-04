@@ -1,0 +1,3 @@
+TARGET: The graph shows the population growth in the last century.
+ASR: The graph shows the population grows in the last century.
+SCORE: 0.915

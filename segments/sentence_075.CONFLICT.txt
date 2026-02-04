@@ -1,0 +1,3 @@
+TARGET: I have to prepare report for the manager.
+ASR: and make sure to prepare a report for the manager.
+SCORE: 0.716

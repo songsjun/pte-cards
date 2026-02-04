@@ -1,0 +1,3 @@
+TARGET: All students depend on their future.
+ASR: Our students depend on their future.
+SCORE: 0.854

@@ -1,0 +1,3 @@
+TARGET: Passengers on the train should not put feet on the seat.
+ASR: Passengers and a train should not put their feet and a seat.
+SCORE: 0.752

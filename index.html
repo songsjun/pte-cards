@@ -646,6 +646,13 @@
         }
       }
 
+      function playDictionaryAudio() {
+        if (!dictAudioUrl) return;
+        dictAudio.pause();
+        dictAudio = new Audio(dictAudioUrl);
+        dictAudio.play().catch(() => {});
+      }
+
       async function fetchDictionary(word) {
         const normalized = word.toLowerCase();
         if (dictCache.has(normalized)) {
@@ -692,6 +699,7 @@
             audioUrl,
             entry,
           });
+          playDictionaryAudio();
         } catch (err) {
           setDictionaryState({
             word,

@@ -1,0 +1,3 @@
+TARGET: His particular interest is in the eighteenth century French society.
+ASR: his particular interest in this 18th century French society.
+SCORE: 0.796

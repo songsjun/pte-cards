@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Card Learning</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Space+Grotesk:wght@400;600&display=swap');
+
+      :root {
+        color-scheme: light;
+        --bg-1: #f6efe6;
+        --bg-2: #cfe8ef;
+        --bg-3: #f9d9c2;
+        --ink: #1f2a33;
+        --muted: #5d6b74;
+        --accent: #e07a5f;
+        --accent-dark: #c85d43;
+        --card: rgba(255, 255, 255, 0.86);
+        --stroke: rgba(31, 42, 51, 0.12);
+        --shadow: 0 24px 60px rgba(31, 42, 51, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+        background: radial-gradient(circle at top left, var(--bg-2), transparent 60%),
+          radial-gradient(circle at 80% 20%, var(--bg-3), transparent 55%),
+          linear-gradient(140deg, var(--bg-1), #ffffff 65%);
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(16px, 3vw, 32px);
+      }
+
+      .bg {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .blob {
+        position: absolute;
+        width: clamp(220px, 40vw, 420px);
+        height: clamp(220px, 40vw, 420px);
+        border-radius: 50%;
+        filter: blur(0px);
+        opacity: 0.6;
+      }
+
+      .blob.one {
+        background: #bcd9f1;
+        top: -12%;
+        left: -8%;
+      }
+
+      .blob.two {
+        background: #f7c7a3;
+        bottom: -15%;
+        right: -10%;
+      }
+
+      .app {
+        position: relative;
+        z-index: 1;
+        width: min(960px, 94vw);
+      }
+
+      header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .title {
+        font-size: clamp(20px, 3vw, 28px);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+      }
+
+      .subtitle {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .progress {
+        font-weight: 600;
+        font-size: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid var(--stroke);
+      }
+
+      .card {
+        margin-top: clamp(20px, 4vw, 32px);
+        padding: clamp(22px, 4vw, 40px);
+        background: var(--card);
+        border-radius: 28px;
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(6px);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .index-pill {
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(31, 42, 51, 0.06);
+        letter-spacing: 0.08em;
+      }
+
+      .status {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+      }
+
+      .sentence {
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: clamp(28px, 5vw, 46px);
+        line-height: 1.25;
+        min-height: 3.5em;
+      }
+
+      .controls {
+        margin-top: clamp(16px, 3vw, 24px);
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        border-radius: 999px;
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(31, 42, 51, 0.15);
+      }
+
+      .ghost {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--stroke);
+        color: var(--ink);
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .primary:hover {
+        background: var(--accent-dark);
+      }
+
+      .hint {
+        margin-top: 14px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(31, 42, 51, 0.6);
+        color: #fff;
+        font-size: 16px;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        z-index: 5;
+        border: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 600px) {
+        .progress {
+          width: 100%;
+          text-align: center;
+        }
+
+        .card {
+          border-radius: 20px;
+        }
+
+        button {
+          width: 100%;
+          max-width: 260px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg">
+      <div class="blob one"></div>
+      <div class="blob two"></div>
+    </div>
+
+    <main class="app">
+      <header>
+        <div>
+          <div class="title">Card Learning</div>
+          <div class="subtitle">Auto loop audio with manual navigation.</div>
+        </div>
+        <div class="progress" id="progress">0 / 0</div>
+      </header>
+
+      <section class="card">
+        <div class="card-top">
+          <div class="index-pill" id="index">#000</div>
+          <div class="status" id="status">Looping</div>
+        </div>
+        <div class="sentence" id="sentence">Loading...</div>
+      </section>
+
+      <div class="controls">
+        <button class="ghost" id="prev">Prev</button>
+        <button class="primary" id="play">Pause</button>
+        <button class="ghost" id="next">Next</button>
+      </div>
+
+      <div class="hint">Use Left/Right to switch, Space to play/pause.</div>
+    </main>
+
+    <button class="overlay hidden" id="startOverlay">Tap to Start Audio</button>
+    <audio id="audio" preload="auto"></audio>
+
+    <script>
+      const state = {
+        items: [],
+        index: 0,
+        autoPlay: true,
+        loop: true,
+      };
+
+      const sentenceEl = document.getElementById("sentence");
+      const indexEl = document.getElementById("index");
+      const progressEl = document.getElementById("progress");
+      const statusEl = document.getElementById("status");
+      const audio = document.getElementById("audio");
+      const overlay = document.getElementById("startOverlay");
+      const playBtn = document.getElementById("play");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+
+      const padId = (id) => String(id).padStart(3, "0");
+
+      async function loadManifest() {
+        const res = await fetch("segments/manifest.json");
+        if (!res.ok) {
+          throw new Error("Failed to load manifest");
+        }
+        const data = await res.json();
+        state.items = data.items || [];
+        return data;
+      }
+
+      function updateButtons() {
+        playBtn.textContent = audio.paused ? "Play" : "Pause";
+      }
+
+      async function loadCard(nextIndex) {
+        if (!state.items.length) return;
+
+        state.index = (nextIndex + state.items.length) % state.items.length;
+        const item = state.items[state.index];
+
+        indexEl.textContent = `#${padId(item.id)}`;
+        progressEl.textContent = `${state.index + 1} / ${state.items.length}`;
+        statusEl.textContent = state.loop ? "Looping" : "Single Play";
+        sentenceEl.textContent = "Loading...";
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = `segments/${item.base}.m4a`;
+        audio.loop = state.loop;
+
+        try {
+          const res = await fetch(`segments/${item.base}.txt`);
+          const text = await res.text();
+          sentenceEl.textContent = text.trim() || "(empty)";
+        } catch (err) {
+          sentenceEl.textContent = "Failed to load text";
+        }
+
+        if (state.autoPlay) {
+          if (audio.readyState >= 2) {
+            tryPlay();
+          } else {
+            audio.addEventListener(
+              "canplay",
+              () => {
+                tryPlay();
+              },
+              { once: true }
+            );
+          }
+        }
+      }
+
+      function tryPlay() {
+        return audio
+          .play()
+          .then(() => {
+            overlay.classList.add("hidden");
+            updateButtons();
+          })
+          .catch(() => {
+            overlay.classList.remove("hidden");
+            updateButtons();
+          });
+      }
+
+      function pause() {
+        audio.pause();
+        updateButtons();
+      }
+
+      prevBtn.addEventListener("click", () => loadCard(state.index - 1));
+      nextBtn.addEventListener("click", () => loadCard(state.index + 1));
+      playBtn.addEventListener("click", () => {
+        if (audio.paused) {
+          tryPlay();
+        } else {
+          pause();
+        }
+      });
+
+      overlay.addEventListener("click", () => {
+        state.autoPlay = true;
+        tryPlay();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") {
+          loadCard(state.index - 1);
+        }
+        if (event.key === "ArrowRight") {
+          loadCard(state.index + 1);
+        }
+        if (event.code === "Space") {
+          event.preventDefault();
+          if (audio.paused) {
+            tryPlay();
+          } else {
+            pause();
+          }
+        }
+      });
+
+      loadManifest()
+        .then(() => loadCard(0))
+        .catch(() => {
+          sentenceEl.textContent = "Could not load segments/manifest.json";
+        });
+    </script>
+  </body>
+</html>

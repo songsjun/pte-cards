@@ -481,6 +481,8 @@
       let dictAudioUrl = "";
       const lastIndexKey = "pte-cards-last-index";
 
+      let dictAudioPrimed = false;
+
       const resolveBaseUrl = () => {
         const path = window.location.pathname;
         let basePath = path;
@@ -608,6 +610,31 @@
       function closeDictionary() {
         dictOverlay.classList.add("hidden");
         dictOverlay.setAttribute("aria-hidden", "true");
+
+        dictAudio.pause();
+        dictAudio.currentTime = 0;
+      }
+
+      function primeDictionaryAudioPlayback() {
+        if (dictAudioPrimed) return;
+        dictAudioPrimed = true;
+        try {
+          dictAudio.muted = true;
+          const p = dictAudio.play();
+          if (p && typeof p.then === "function") {
+            p.then(() => {
+              dictAudio.pause();
+              dictAudio.currentTime = 0;
+              dictAudio.muted = false;
+            }).catch(() => {
+              dictAudio.muted = false;
+            });
+          } else {
+            dictAudio.muted = false;
+          }
+        } catch {
+          dictAudio.muted = false;
+        }
       }
 
       function renderDefinitions(entry) {
@@ -649,6 +676,7 @@
       function playDictionaryAudio() {
         if (!dictAudioUrl) return;
         dictAudio.pause();
+        dictAudio.currentTime = 0;
         dictAudio = new Audio(dictAudioUrl);
         dictAudio.play().catch(() => {});
       }
@@ -672,6 +700,7 @@
       }
 
       async function showDictionary(word) {
+        primeDictionaryAudioPlayback();
         openDictionary();
         setDictionaryState({
           word,
